@@ -3,23 +3,22 @@ from sklearn import svm
 from sklearn.model_selection import GridSearchCV
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
-from sklearn.neighbors import KNeighborsRegressor
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cross_validation import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
 
 data = np.loadtxt('input3.csv', delimiter=',')
 x_train, x_test, y_train, y_test = train_test_split(
     data[:,0:2],data[:,2], test_size=.4, random_state=0 
 )
-fp = open('output3.csv', 'w')
 
 clf_linear = svm.SVC(kernel='linear', C=100)
 clf_linear.fit(x_train, y_train)
-fp.write("svm_linear,")
-fp.write(str(cross_val_score(clf_linear,x_train,y_train,cv=5)) + ', ')
-fp.write(str(cross_val_score(clf_linear,x_test,y_test,cv=5)) + '\n')
+print "svm_linear"
+print(max(cross_val_score(clf_linear,x_train,y_train,cv=5)))
+print(max(cross_val_score(clf_linear,x_test,y_test,cv=5)))
 
 param_grid_poly = {'C' : [0.1, 1, 3], 'degree' : [4, 5, 6], 'gamma' : [0.1, 0.5]}
 
