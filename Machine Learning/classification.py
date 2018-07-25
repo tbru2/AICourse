@@ -5,7 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import cross_val_score
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
@@ -14,14 +14,16 @@ x_train, x_test, y_train, y_test = train_test_split(
     data[:,0:2],data[:,2], test_size=.4, random_state=0 
 )
 
-clf_linear = svm.SVC(kernel='linear', C=100)
-clf_linear.fit(x_train, y_train)
+param_grid_linear = {'C' : [0.1, 0.5, 1, 5, 10, 50, 100]}
+clf_linear = svm.SVC(kernel='linear')
+grid_search_linear = GridSearchCV(clf_linear, param_grid_linear, cv=5)
+grid_search_linear.fit(x_train, y_train)
 print "svm_linear"
-print(max(cross_val_score(clf_linear,x_train,y_train,cv=5)))
-print(max(cross_val_score(clf_linear,x_test,y_test,cv=5)))
+print grid_search_linear.best_score_
+pred_linear = grid_search_linear.predict(x_test)
+print accuracy_score(y_test, pred_linear)
 
 param_grid_poly = {'C' : [0.1, 1, 3], 'degree' : [4, 5, 6], 'gamma' : [0.1, 0.5]}
-
 clf_poly = svm.SVC(kernel='poly')
 grid_search_poly = GridSearchCV(clf_poly, param_grid_poly, cv=5)
 grid_search_poly.fit(x_train, y_train)
