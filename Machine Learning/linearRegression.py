@@ -7,26 +7,20 @@ def lin_reg(inputs, targets, alpha, fp):
     sumZ = 0.
     j = 0
     k = 0
-    
     inputs = np.concatenate((np.ones((np.shape(inputs)[0],1)), inputs), axis=1)
     beta = np.zeros(np.shape(inputs)[1])
-    
+   
     for i in range(1,101):
         for row in inputs:
-            for point in row:
-                sum +=  beta[k] * point
-                k += 1
-            sum -= targets[j]
-            sumZ += np.sum(np.dot(sum, row))
-            k = 0
+            sum += np.dot(row, np.transpose(beta)) - np.array([targets[j], targets[j], targets[j]])
+            sumZ += sum * row
             j+=1
-        beta[0] -= (alpha / np.shape(inputs)[0]) * sum
-        for m in range(1,np.shape(beta)[0]):
-            beta[m] -= (alpha / np.shape(inputs)[0]) * sum
+        beta[0] -= (alpha/ np.shape(inputs)[0]) * sum[0]
+        beta[1:] -= ((alpha/ np.shape(inputs)[0]) * sumZ[1:])
         sum = 0.
         sumZ = 0.
         j = 0
-        
+    
     fp.write(str(alpha) +',' + str(i) + ',')
     for i in range(np.shape(beta)[0]-1):
         fp.write(str(beta[i]) + ',')

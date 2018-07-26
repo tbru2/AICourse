@@ -7,17 +7,13 @@ fp = open("output1.csv", 'w')
 
 cols = np.shape(data)[0]
 data = np.concatenate((np.ones((cols,1)), data), axis=1)
-
 while 1:
-    for row in data:
-        f = np.sum(np.dot(np.transpose(row[:3]), weights))
-        if f <= 0:
-            f = -1
-        else:
-            f = 1
     
+    for row in data:
+        a = np.dot(row[:3], weights)
+        a = np.where(a > 0, 1, -1)
         for i in range(np.shape(weights)[0]):
-            if f * row[3] <= 0:
+            if a * row[3] <= 0:
                 weights[i] += row[3] * row[i] 
         if weights[2] - weights[1] == 0:
             break
