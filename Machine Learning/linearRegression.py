@@ -12,11 +12,11 @@ def lin_reg(inputs, targets, alpha, fp):
    
     for i in range(1,101):
         for row in inputs:
-            sum += np.dot(row, np.transpose(beta)) - np.array([targets[j], targets[j], targets[j]])
+            sum += row * beta - np.array([targets[j], targets[j], targets[j]])
             sumZ += sum * row
-            j+=1
-        beta[0] -= (alpha/ np.shape(inputs)[0]) * sum[0]
-        beta[1:] -= ((alpha/ np.shape(inputs)[0]) * sumZ[1:])
+            j+=1 
+        beta[0] -= (alpha/ (np.shape(inputs)[0])) * sum[0]
+        beta[1:] -= (alpha/ (np.shape(inputs)[0])) * sumZ[1:]
         sum = 0.
         sumZ = 0.
         j = 0
@@ -31,14 +31,13 @@ def lin_reg(inputs, targets, alpha, fp):
 def main():
     fp = open("output2.csv", 'w')
     data = np.loadtxt('input2.csv', delimiter=',')
-    #data = (data - np.mean(data))/np.std(data)
     inputs = data[:,:2]
-    inputs = (inputs - np.mean(inputs,axis=0))/np.std(inputs, axis=0)
+    inputs = (inputs - np.mean(inputs))/np.std(inputs)
     targets = data[:,2]
     alpha = [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1., 5., 10., 20.]
     for param in alpha:
         lin_reg(inputs, targets, param, fp)
     fp.close()
-    
+  
 if __name__ == '__main__':
     main()
