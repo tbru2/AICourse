@@ -154,3 +154,4 @@ if not sudokuBoard.isComplete():
 sudokuBoard.display()
 fp = open("output.txt", 'w')
 sudokuBoard.outputToFile(fp, searchType)
+fp.close()
